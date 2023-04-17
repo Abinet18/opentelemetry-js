@@ -4,7 +4,6 @@
     "outDir": "build",
     "rootDir": "."
   },
-  "files": [],
   "include": [
     "src/**/*.ts",
     "test/**/*.ts"
@@ -14,19 +13,31 @@
       "path": "../../../api"
     },
     {
+      "path": "../../../packages/opentelemetry-context-async-hooks"
+    },
+    {
       "path": "../../../packages/opentelemetry-core"
     },
     {
-      "path": "../../../packages/opentelemetry-resources"
+      "path": "../../../packages/opentelemetry-sdk-trace-base"
     },
     {
-      "path": "../../../packages/opentelemetry-sdk-trace-base"
+      "path": "../../../packages/opentelemetry-sdk-trace-node"
+    },
+    {
+      "path": "../../../packages/opentelemetry-semantic-conventions"
     },
     {
       "path": "../../../packages/sdk-metrics"
     },
     {
       "path": "../api-logs"
+    },
+    {
+      "path": "../exporter-logs-otlp-proto"
+    },
+    {
+      "path": "../opentelemetry-instrumentation"
     },
     {
       "path": "../sdk-logs"

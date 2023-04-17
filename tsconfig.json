@@ -7,6 +7,7 @@
       "api",
       "experimental/packages/api-events",
       "experimental/packages/api-logs",
+      "experimental/packages/exporter-logs-otlp-proto",
       "experimental/packages/exporter-trace-otlp-grpc",
       "experimental/packages/exporter-trace-otlp-http",
       "experimental/packages/exporter-trace-otlp-proto",
@@ -19,6 +20,7 @@
       "experimental/packages/opentelemetry-instrumentation-fetch",
       "experimental/packages/opentelemetry-instrumentation-grpc",
       "experimental/packages/opentelemetry-instrumentation-http",
+      "experimental/packages/opentelemetry-instrumentation-page-view",
       "experimental/packages/opentelemetry-instrumentation-xml-http-request",
       "experimental/packages/opentelemetry-sdk-node",
       "experimental/packages/otlp-exporter-base",
@@ -63,6 +65,9 @@
       "path": "experimental/packages/api-logs"
     },
     {
+      "path": "experimental/packages/exporter-logs-otlp-proto"
+    },
+    {
       "path": "experimental/packages/exporter-trace-otlp-grpc"
     },
     {
@@ -97,6 +102,9 @@
     },
     {
       "path": "experimental/packages/opentelemetry-instrumentation-http"
+    },
+    {
+      "path": "experimental/packages/opentelemetry-instrumentation-page-view"
     },
     {
       "path": "experimental/packages/opentelemetry-instrumentation-xml-http-request"
