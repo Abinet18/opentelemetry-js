@@ -18,14 +18,14 @@ import {
   InstrumentationBase,
   InstrumentationConfig,
 } from '@opentelemetry/instrumentation';
-
+import { Resource } from '@opentelemetry/resources';
 import { LogRecord } from '@opentelemetry/api-logs';
 import {
   ConsoleLogRecordExporter,
   LoggerProvider,
 } from '@opentelemetry/sdk-logs';
-import { OTLPLogsExporter } from '@opentelemetry/exporter-logs-otlp-proto';
-
+// import { OTLPLogsExporter as OTLPLogsHttpExporter } from '@opentelemetry/exporter-logs-otlp-http';
+import { OTLPLogsExporter as OTLPLogsProtoExporter } from '@opentelemetry/exporter-logs-otlp-proto';
 import { VERSION } from './version';
 import { SimpleLogRecordProcessor } from '@opentelemetry/sdk-logs';
 
@@ -52,12 +52,31 @@ export class PageViewEventInstrumentation extends InstrumentationBase<unknown> {
    * callback to be executed when page is viewed
    */
   private _onPageView() {
-    const loggerProvider = new LoggerProvider();
+    const loggerProvider = new LoggerProvider({
+      resource: new Resource({
+        'service.name': 'testAppLog',
+        'service.namespace': 'testAppLog',
+      }),
+    });
+
     loggerProvider.addLogRecordProcessor(
       new SimpleLogRecordProcessor(new ConsoleLogRecordExporter())
     );
+    // loggerProvider.addLogRecordProcessor(
+    //   new SimpleLogRecordProcessor(
+    //     new OTLPLogsHttpExporter({
+    //       url: 'http://localhost:4318/v1/logs',
+    //       headers: { Accept: 'application/json' },
+    //     })
+    //   )
+    // );
     loggerProvider.addLogRecordProcessor(
-      new SimpleLogRecordProcessor(new OTLPLogsExporter())
+      new SimpleLogRecordProcessor(
+        new OTLPLogsProtoExporter({
+          url: 'http://localhost:4318/v1/logs',
+          headers: { Accept: 'application/x-protobuf' },
+        })
+      )
     );
 
     const pageViewEvent: LogRecord = {
@@ -72,7 +91,7 @@ export class PageViewEventInstrumentation extends InstrumentationBase<unknown> {
         },
       },
     };
-    loggerProvider.getLogger('page_view').emit(pageViewEvent);
+    loggerProvider.getLogger('page_view_event').emit(pageViewEvent);
     // console.log('page viewed', pageViewEvent);
   }
 

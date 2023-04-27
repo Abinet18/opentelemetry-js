@@ -34,6 +34,9 @@
       "path": "../api-logs"
     },
     {
+      "path": "../exporter-logs-otlp-http"
+    },
+    {
       "path": "../exporter-logs-otlp-proto"
     },
     {

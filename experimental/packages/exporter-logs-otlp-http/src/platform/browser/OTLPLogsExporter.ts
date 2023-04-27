@@ -19,11 +19,8 @@ import {
   OTLPExporterConfigBase,
   appendResourcePathToUrl,
   appendRootPathToUrlIfNeeded,
+  OTLPExporterBrowserBase,
 } from '@opentelemetry/otlp-exporter-base';
-import {
-  OTLPProtoExporterBrowserBase,
-  ServiceClientType,
-} from '@opentelemetry/otlp-proto-exporter-base';
 import {
   createExportLogsServiceRequest,
   IExportLogsServiceRequest,
@@ -38,10 +35,7 @@ const DEFAULT_COLLECTOR_URL = `http://localhost:4318/${DEFAULT_COLLECTOR_RESOURC
  * Collector Trace Exporter for Web
  */
 export class OTLPLogsExporter
-  extends OTLPProtoExporterBrowserBase<
-    ReadableLogRecord,
-    IExportLogsServiceRequest
-  >
+  extends OTLPExporterBrowserBase<ReadableLogRecord, IExportLogsServiceRequest>
   implements LogRecordExporter
 {
   constructor(config: OTLPExporterConfigBase = {}) {
@@ -68,9 +62,5 @@ export class OTLPLogsExporter
           DEFAULT_COLLECTOR_RESOURCE_PATH
         )
       : DEFAULT_COLLECTOR_URL;
-  }
-
-  getServiceClientType() {
-    return ServiceClientType.LOGS;
   }
 }
