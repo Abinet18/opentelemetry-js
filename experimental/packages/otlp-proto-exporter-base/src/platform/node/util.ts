@@ -36,6 +36,9 @@ export function getExportRequestProto<ServiceRequest>(
   if (clientType === ServiceClientType.METRICS) {
     return root.opentelemetry.proto.collector.metrics.v1
       .ExportMetricsServiceRequest as unknown as ExportRequestType<ServiceRequest>;
+  } else if (clientType === ServiceClientType.LOGS) {
+    return root.opentelemetry.proto.collector.logs.v1
+      .ExportLogsServiceRequest as unknown as ExportRequestType<ServiceRequest>;
   } else {
     return root.opentelemetry.proto.collector.trace.v1
       .ExportTraceServiceRequest as unknown as ExportRequestType<ServiceRequest>;
