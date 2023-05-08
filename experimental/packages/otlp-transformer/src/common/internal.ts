@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-<<<<<<< HEAD
-=======
-import { LogAttributes } from '@opentelemetry/api-logs';
->>>>>>> logs-exporter-otlp-proto
+
 import type { IAnyValue, IKeyValue } from './types';
 import { LogAttributes } from '@opentelemetry/api-logs';
 

@@ -33,25 +33,15 @@ export interface ExportRequestType<T, R = T & { toJSON: () => unknown }> {
 export function getExportRequestProto<ServiceRequest>(
   clientType: ServiceClientType
 ): ExportRequestType<ServiceRequest> {
-<<<<<<< HEAD
   if (clientType === ServiceClientType.METRICS) {
-=======
-  if (clientType === ServiceClientType.SPANS) {
     return root.opentelemetry.proto.collector.trace.v1
       .ExportTraceServiceRequest as unknown as ExportRequestType<ServiceRequest>;
   } else if (clientType === ServiceClientType.LOGS) {
     return root.opentelemetry.proto.collector.logs.v1
       .ExportLogsServiceRequest as unknown as ExportRequestType<ServiceRequest>;
   } else {
->>>>>>> logs-exporter-otlp-proto
     return root.opentelemetry.proto.collector.metrics.v1
       .ExportMetricsServiceRequest as unknown as ExportRequestType<ServiceRequest>;
-  } else if (clientType === ServiceClientType.LOGS) {
-    return root.opentelemetry.proto.collector.logs.v1
-      .ExportLogsServiceRequest as unknown as ExportRequestType<ServiceRequest>;
-  } else {
-    return root.opentelemetry.proto.collector.trace.v1
-      .ExportTraceServiceRequest as unknown as ExportRequestType<ServiceRequest>;
   }
 }
 

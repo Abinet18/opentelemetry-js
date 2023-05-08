@@ -22,10 +22,7 @@ import {
   OTLPExporterConfigBase,
   sendWithXhr,
 } from '@opentelemetry/otlp-exporter-base';
-<<<<<<< HEAD
-=======
 
->>>>>>> logs-exporter-otlp-proto
 import { getExportRequestProto } from '../node';
 
 interface ExportRequestType<T, R = T & { toJSON: () => unknown }> {
