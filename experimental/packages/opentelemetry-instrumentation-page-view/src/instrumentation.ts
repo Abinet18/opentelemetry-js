@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
-import {
-  InstrumentationBase,
-  InstrumentationConfig,
-} from '@opentelemetry/instrumentation';
-import { Resource } from '@opentelemetry/resources';
+import { InstrumentationBase } from '@opentelemetry/instrumentation';
+
 import { Logger, LogRecord } from '@opentelemetry/api-logs';
-import {
-  ConsoleLogRecordExporter,
-  LoggerProvider,
-} from '@opentelemetry/sdk-logs';
-import { OTLPLogsExporter as OTLPLogsProtoExporter } from '@opentelemetry/exporter-logs-otlp-proto';
+
 import { VERSION } from './version';
-import { SimpleLogRecordProcessor } from '@opentelemetry/sdk-logs';
-// import { History, Location, Update, createBrowserHistory } from 'history';
 
 /**
  * This class represents a document load plugin
@@ -43,9 +34,9 @@ export class PageViewEventInstrumentation extends InstrumentationBase<unknown> {
    *
    * @param config
    */
-  constructor(config: InstrumentationConfig = {}) {
+  constructor(config: any = {}) {
     super('@opentelemetry/instrumentation-page-view', VERSION, config);
-    this._setLogger();
+    this._setLogger(config);
     this._wrapHistory();
   }
 
@@ -93,16 +84,16 @@ export class PageViewEventInstrumentation extends InstrumentationBase<unknown> {
     // console.log('page viewed', pageViewEvent);
   }
 
-  private _setLogger() {
-    const loggerProvider = new LoggerProvider({
-      resource: new Resource({
-        'service.name': 'testAppLog',
-        'service.namespace': 'testAppLog',
-      }),
-    });
-    loggerProvider.addLogRecordProcessor(
-      new SimpleLogRecordProcessor(new ConsoleLogRecordExporter())
-    );
+  private _setLogger(config: any) {
+    // const loggerProvider = new LoggerProvider({
+    //   resource: new Resource({
+    //     'service.name': 'testAppLog',
+    //     'service.namespace': 'testAppLog',
+    //   }),
+    // });
+    // loggerProvider.addLogRecordProcessor(
+    //   new SimpleLogRecordProcessor(new ConsoleLogRecordExporter())
+    // );
     // loggerProvider.addLogRecordProcessor(
     //   new SimpleLogRecordProcessor(
     //     new OTLPLogsHttpExporter({
@@ -111,16 +102,16 @@ export class PageViewEventInstrumentation extends InstrumentationBase<unknown> {
     //     })
     //   )
     // );
-    loggerProvider.addLogRecordProcessor(
-      new SimpleLogRecordProcessor(
-        new OTLPLogsProtoExporter({
-          url: 'http://localhost:4318/v1/logs',
-          headers: { Accept: 'application/x-protobuf' },
-        })
-      )
-    );
+    // loggerProvider.addLogRecordProcessor(
+    //   new SimpleLogRecordProcessor(
+    //     new OTLPLogsProtoExporter({
+    //       url: 'http://localhost:4318/v1/logs',
+    //       headers: { Accept: 'application/x-protobuf' },
+    //     })
+    //   )
+    // );
 
-    this.logger = loggerProvider.getLogger('page_view_event');
+    this.logger = config.loggerProvider.getLogger('page_view_event');
   }
 
   /**
