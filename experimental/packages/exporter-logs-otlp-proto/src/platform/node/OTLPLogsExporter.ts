@@ -50,7 +50,11 @@ import {
 import { ReadableLogRecord, LogRecordExporter } from '@opentelemetry/sdk-logs';
 
 const DEFAULT_COLLECTOR_RESOURCE_PATH = 'v1/logs';
+<<<<<<< HEAD
 const DEFAULT_COLLECTOR_URL = `http://localhost:4317/${DEFAULT_COLLECTOR_RESOURCE_PATH}`;
+=======
+const DEFAULT_COLLECTOR_URL = `http://localhost:4318/${DEFAULT_COLLECTOR_RESOURCE_PATH}`;
+>>>>>>> logs-exporter-otlp-proto
 
 /**
  * Collector Trace Exporter for Node
@@ -67,7 +71,11 @@ export class OTLPLogsExporter
     this.headers = Object.assign(
       this.headers,
       baggageUtils.parseKeyPairsIntoRecord(
+<<<<<<< HEAD
         getEnv().OTEL_EXPORTER_OTLP_LOGS_ENDPOINT
+=======
+        getEnv().OTEL_EXPORTER_OTLP_LOGS_HEADERS
+>>>>>>> logs-exporter-otlp-proto
       )
     );
   }

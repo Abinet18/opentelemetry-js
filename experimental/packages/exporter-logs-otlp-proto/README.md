@@ -20,6 +20,7 @@ The OpenTelemetry Collector Exporter does not have a service name configuration.
 In order to set the service name, use the `service.name` resource attribute as prescribed in the [OpenTelemetry Resource Semantic Conventions][semconv-resource-service-name].
 To see documentation and sample code for the logs exporter, see the [exporter-metrics-otlp-proto package][logs-exporter-url]
 
+<<<<<<< HEAD
 ## Traces in Web - PROTO over http
 
 ```js
@@ -28,16 +29,38 @@ const { OTLPLogsExporter } =  require('@opentelemetry/exporter-logs-otlp-proto')
 
 const collectorOptions = {
   url: '<opentelemetry-collector-url>', // url is optional and can be omitted - default is http://localhost:4317/v1/logs
+=======
+## Logs in Web - PROTO over http
+
+```js
+const { LoggerProvider, SimpleLogRecordProcessor } = require('@opentelemetry/sdk-logs');
+const { OTLPLogsExporter } =  require('@opentelemetry/exporter-logs-otlp-proto');
+
+const collectorOptions = {
+  url: '<opentelemetry-collector-url>', // url is optional and can be omitted - default is http://localhost:4318/v1/logs
+>>>>>>> logs-exporter-otlp-proto
   headers: {
     foo: 'bar'
   }, //an optional object containing custom headers to be sent with each request will only work with http
 };
 
+<<<<<<< HEAD
 const provider = new LoggerProvider();
 const exporter = new OTLPLogsExporter(collectorOptions);
 provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
 
 provider.register();
+=======
+const logProvider = new LoggerProvider({resource: new Resource({'service.name': 'testApp'})});
+const logExporter = new OTLPLogsExporter(collectorOptions);
+logProvider.addLogRecordProcessor(new SimpleLogRecordProcessor(exporter));
+
+const logger = logProvider.getLogger('test_log_instrumentation');
+
+logger.emit({
+  //log data to emit
+})
+>>>>>>> logs-exporter-otlp-proto
 
 ```
 
@@ -61,7 +84,11 @@ To override the default timeout duration, use the following options:
   ```js
   const collectorOptions = {
     timeoutMillis: 15000,
+<<<<<<< HEAD
     url: '<opentelemetry-collector-url>', // url is optional and can be omitted - default is http://localhost:4318/v1/traces
+=======
+    url: '<opentelemetry-collector-url>', // url is optional and can be omitted - default is http://localhost:4318/v1/logs
+>>>>>>> logs-exporter-otlp-proto
     headers: {
       foo: 'bar'
     }, //an optional object containing custom headers to be sent with each request will only work with http
@@ -103,8 +130,13 @@ Apache 2.0 - See [LICENSE][license-url] for more information.
 [discussions-url]: https://github.com/open-telemetry/opentelemetry-js/discussions
 [license-url]: https://github.com/open-telemetry/opentelemetry-js/blob/main/LICENSE
 [license-image]: https://img.shields.io/badge/license-Apache_2.0-green.svg?style=flat
+<<<<<<< HEAD
 [npm-url]: https://www.npmjs.com/package/@opentelemetry/exporter-trace-otlp-proto
 [npm-img]: https://badge.fury.io/js/%40opentelemetry%2Fexporter-trace-otlp-proto.svg
+=======
+[npm-url]: https://www.npmjs.com/package/@opentelemetry/exporter-logs-otlp-proto
+[npm-img]: https://badge.fury.io/js/%40opentelemetry%2Fexporter-logs-otlp-proto.svg
+>>>>>>> logs-exporter-otlp-proto
 [opentelemetry-collector-url]: https://github.com/open-telemetry/opentelemetry-collector
 [semconv-resource-service-name]: https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/resource/semantic_conventions/README.md#service
 [logs-exporter-url]: https://github.com/open-telemetry/opentelemetry-js/tree/main/experimental/packages/opentelemetry-exporter-logs-otlp-proto

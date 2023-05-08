@@ -19,15 +19,15 @@ import {
   InstrumentationConfig,
 } from '@opentelemetry/instrumentation';
 import { Resource } from '@opentelemetry/resources';
-import { LogRecord } from '@opentelemetry/api-logs';
+import { Logger, LogRecord } from '@opentelemetry/api-logs';
 import {
   ConsoleLogRecordExporter,
   LoggerProvider,
 } from '@opentelemetry/sdk-logs';
-// import { OTLPLogsExporter as OTLPLogsHttpExporter } from '@opentelemetry/exporter-logs-otlp-http';
 import { OTLPLogsExporter as OTLPLogsProtoExporter } from '@opentelemetry/exporter-logs-otlp-proto';
 import { VERSION } from './version';
 import { SimpleLogRecordProcessor } from '@opentelemetry/sdk-logs';
+// import { History, Location, Update, createBrowserHistory } from 'history';
 
 /**
  * This class represents a document load plugin
@@ -37,6 +37,7 @@ export class PageViewEventInstrumentation extends InstrumentationBase<unknown> {
   readonly component: string = 'page-view-event';
   readonly version: string = '1';
   moduleName = this.component;
+  logger: Logger | null = null;
 
   /**
    *
@@ -44,6 +45,8 @@ export class PageViewEventInstrumentation extends InstrumentationBase<unknown> {
    */
   constructor(config: InstrumentationConfig = {}) {
     super('@opentelemetry/instrumentation-page-view', VERSION, config);
+    this._setLogger();
+    this._wrapHistory();
   }
 
   init() {}
@@ -52,13 +55,51 @@ export class PageViewEventInstrumentation extends InstrumentationBase<unknown> {
    * callback to be executed when page is viewed
    */
   private _onPageView() {
+    const pageViewEvent: LogRecord = {
+      attributes: {
+        'event.domain': 'browser',
+        'event.name': 'page_view',
+        'event.type': 0,
+        'event.data': {
+          url: document.documentURI as string,
+          referrer: document.referrer,
+          title: document.title,
+        },
+      },
+    };
+    this.logger?.emit(pageViewEvent);
+    // console.log('page viewed', pageViewEvent);
+  }
+
+  /**
+   * callback to be executed when page is viewed
+   */
+  private _onVirtualPageView(
+    changeState: string | null | undefined,
+    url: string | null | undefined
+  ) {
+    const vPageViewEvent: LogRecord = {
+      attributes: {
+        'event.domain': 'browser',
+        'event.name': 'page_view',
+        'event.type': 1,
+        'event.data': {
+          url: url || '',
+          changeState: changeState || '',
+        },
+      },
+    };
+    this.logger?.emit(vPageViewEvent);
+    // console.log('page viewed', pageViewEvent);
+  }
+
+  private _setLogger() {
     const loggerProvider = new LoggerProvider({
       resource: new Resource({
         'service.name': 'testAppLog',
         'service.namespace': 'testAppLog',
       }),
     });
-
     loggerProvider.addLogRecordProcessor(
       new SimpleLogRecordProcessor(new ConsoleLogRecordExporter())
     );
@@ -79,27 +120,14 @@ export class PageViewEventInstrumentation extends InstrumentationBase<unknown> {
       )
     );
 
-    const pageViewEvent: LogRecord = {
-      attributes: {
-        'event.domain': 'browser',
-        'event.name': 'page_view',
-        'event.type': 0,
-        'event.data': {
-          url: document.documentURI as string,
-          referrer: document.referrer,
-          title: document.title,
-        },
-      },
-    };
-    loggerProvider.getLogger('page_view_event').emit(pageViewEvent);
-    // console.log('page viewed', pageViewEvent);
+    this.logger = loggerProvider.getLogger('page_view_event');
   }
 
   /**
    * executes callback {_onDocumenContentLoaded } when the page is viewed
    */
   private _waitForPageLoad() {
-    document.addEventListener('DOMContentLoaded', this._onPageView);
+    document.addEventListener('DOMContentLoaded', this._onPageView.bind(this));
   }
 
   /**
@@ -117,5 +145,28 @@ export class PageViewEventInstrumentation extends InstrumentationBase<unknown> {
    */
   override disable() {
     document.removeEventListener('DOMContentLoaded', this._onPageView);
+  }
+
+  private _wrapHistory(): void {
+    const originalPushState = history.pushState;
+    const originalReplaceState = history.replaceState;
+
+    history.pushState = (
+      data: any,
+      title: string,
+      url?: string | null | undefined
+    ) => {
+      originalPushState.apply(history, [data, title, url]);
+      this._onVirtualPageView('pushState', url);
+    };
+
+    history.replaceState = (
+      data: any,
+      title: string,
+      url?: string | null | undefined
+    ) => {
+      originalReplaceState.apply(history, [data, title, url]);
+      this._onVirtualPageView('replaceState', url);
+    };
   }
 }

@@ -80,7 +80,8 @@
     "@opentelemetry/core": "1.12.0",
     "@opentelemetry/instrumentation": "0.38.0",
     "@opentelemetry/semantic-conventions": "1.12.0",
-    "semver": "^7.3.5"
+    "semver": "^7.3.5",
+    "history": "^5.3.0"
   },
   "homepage": "https://github.com/open-telemetry/opentelemetry-js/tree/main/experimental/packages/opentelemetry-instrumentation-http",
   "sideEffects": false

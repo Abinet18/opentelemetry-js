@@ -13,21 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const testsContext = require.context('../browser', true, /test$/);
+testsContext.keys().forEach(testsContext);
 
-export const validAttributes = {
-  string: 'string',
-  number: 0,
-  bool: true,
-  'array<string>': ['str1', 'str2'],
-  'array<number>': [1, 2],
-  'array<bool>': [true, false],
-};
-
-export const invalidAttributes = {
-  // invalid attribute type object
-  // object: { foo: 'bar' },
-  // invalid attribute inhomogeneous array
-  'non-homogeneous-array': [0, ''],
-  // This empty length attribute should not be set
-  '': 'empty-key',
-};
+const srcContext = require.context('.', true, /src$/);
+srcContext.keys().forEach(srcContext);

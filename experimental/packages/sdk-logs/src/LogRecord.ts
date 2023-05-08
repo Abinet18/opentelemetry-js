@@ -27,14 +27,22 @@ import type { IResource } from '@opentelemetry/resources';
 import type { ReadableLogRecord } from './export/ReadableLogRecord';
 import type { LogRecordLimits } from './types';
 import { Logger } from './Logger';
+<<<<<<< HEAD
 import { LogAttributes } from '@opentelemetry/api-logs';
+=======
+import {LogAttributes} from "@opentelemetry/api-logs";
+>>>>>>> logs-exporter-otlp-proto
 
 export class LogRecord implements ReadableLogRecord {
   readonly hrTime: api.HrTime;
   readonly spanContext?: api.SpanContext;
   readonly resource: IResource;
   readonly instrumentationScope: InstrumentationScope;
+<<<<<<< HEAD
   readonly attributes: LogAttributes = {};
+=======
+  readonly attributes: logsAPI.LogAttributes = {};
+>>>>>>> logs-exporter-otlp-proto
   private _severityText?: string;
   private _severityNumber?: logsAPI.SeverityNumber;
   private _body?: string;

@@ -49,7 +49,11 @@ export class OTLPLogsExporter
     this._headers = Object.assign(
       this._headers,
       baggageUtils.parseKeyPairsIntoRecord(
+<<<<<<< HEAD
         getEnv().OTEL_EXPORTER_OTLP_LOGS_ENDPOINT
+=======
+        getEnv().OTEL_EXPORTER_OTLP_LOGS_HEADERS
+>>>>>>> logs-exporter-otlp-proto
       )
     );
   }
