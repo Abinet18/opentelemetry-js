@@ -69,48 +69,29 @@ export class PageViewEventInstrumentation extends InstrumentationBase<unknown> {
     changeState: string | null | undefined,
     url: string | null | undefined
   ) {
+    const startTime = Date.now() * 1000;
+    const oldUrl = window.location.href;
+    const currentUrl = url || '';
+    const title = document.title;
+
     const vPageViewEvent: LogRecord = {
       attributes: {
         'event.domain': 'browser',
         'event.name': 'page_view',
         'event.type': 1,
         'event.data': {
-          url: url || '',
-          changeState: changeState || '',
+          oldUrl: oldUrl,
+          url: currentUrl,
+          title: title,
+          startTime: startTime,
+          changeSate: changeState || '',
         },
       },
     };
     this.logger?.emit(vPageViewEvent);
-    // console.log('page viewed', pageViewEvent);
   }
 
   private _setLogger(config: any) {
-    // const loggerProvider = new LoggerProvider({
-    //   resource: new Resource({
-    //     'service.name': 'testAppLog',
-    //     'service.namespace': 'testAppLog',
-    //   }),
-    // });
-    // loggerProvider.addLogRecordProcessor(
-    //   new SimpleLogRecordProcessor(new ConsoleLogRecordExporter())
-    // );
-    // loggerProvider.addLogRecordProcessor(
-    //   new SimpleLogRecordProcessor(
-    //     new OTLPLogsHttpExporter({
-    //       url: 'http://localhost:4318/v1/logs',
-    //       headers: { Accept: 'application/json' },
-    //     })
-    //   )
-    // );
-    // loggerProvider.addLogRecordProcessor(
-    //   new SimpleLogRecordProcessor(
-    //     new OTLPLogsProtoExporter({
-    //       url: 'http://localhost:4318/v1/logs',
-    //       headers: { Accept: 'application/x-protobuf' },
-    //     })
-    //   )
-    // );
-
     this.logger = config.loggerProvider.getLogger('page_view_event');
   }
 
