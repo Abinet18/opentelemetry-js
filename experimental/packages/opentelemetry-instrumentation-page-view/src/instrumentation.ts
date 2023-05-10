@@ -69,21 +69,15 @@ export class PageViewEventInstrumentation extends InstrumentationBase<unknown> {
     changeState: string | null | undefined,
     url: string | null | undefined
   ) {
-    const startTime = Date.now() * 1000;
-    const oldUrl = window.location.href;
-    const currentUrl = url || '';
     const title = document.title;
-
     const vPageViewEvent: LogRecord = {
       attributes: {
         'event.domain': 'browser',
         'event.name': 'page_view',
         'event.type': 1,
         'event.data': {
-          oldUrl: oldUrl,
-          url: currentUrl,
+          url: url || window.location.href,
           title: title,
-          startTime: startTime,
           changeSate: changeState || '',
         },
       },
